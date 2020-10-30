@@ -1,6 +1,17 @@
-# Getting Started with Create React App
+# 社内向け React 勉強会用リポジトリ
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## サンプルアプリ仕様
+
+最近読んだ本のレビューをアップするサイト
+
+* 読んだ本のレビューの一覧を閲覧できる
+* 読んだ本のレビューを:
+  * 登録できる
+  * 編集できる
+  * 削除できる
+
 
 ## Available Scripts
 
