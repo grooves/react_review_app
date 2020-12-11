@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import 'semantic-ui-css/semantic.min.css'
+import { Card, Statistic, Button, Grid, Header, Divider, Modal, Form } from 'semantic-ui-react'
 
 function App() {
   const [reviews, setReviews] = useState([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(
     () => {
@@ -13,41 +16,172 @@ function App() {
   );
 
   return (
-    <div>
-      <h1>Book Reviews</h1>
-      <Reviews reviews={reviews} />
+    <div id="app">
+      <Header as="h1">Book Reviews</Header>
+      <Button primary onClick={openModal}>Post review</Button>
+      <Divider />
+      <Reviews reviews={reviews} openModal={openModal}/>
+      <Modal open={isCreateModalOpen} onClose={closeModal} closeIcon>
+        <ModalBody closeModal={closeModal} isCreate={true} />
+      </Modal>
     </div>
   );
+
+  async function fetchReviews() {
+    const res = await fetch('https://bookreview-ten.vercel.app/api/reviews', { headers: { 'Content-Type': 'application/json' } })
+    return res.json()
+  }
+
+  function openModal() {
+    setIsCreateModalOpen(true);
+  }
+
+  function closeModal() {
+    setIsCreateModalOpen(false);
+  };
+
 }
 
-function Reviews({ reviews }) {
+function Reviews({ reviews, openModal }) {
   return (
-    <dl>
-      {reviews.map(review => {
-        return <Review {...review} />;
+    <Grid columns={5}>
+      {reviews.map((review, index) => {
+        return (
+          <Grid.Column>
+            <Review {...review} openModal={openModal} key={`review-${index}`} />
+          </Grid.Column>
+        );
       })}
-    </dl>
+    </Grid>
   );
 }
 
-function Review({ title, reviewer, body, score }) {
+function Review({ id, title, reviewer, body, score, openModal }) {
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   return (
     <>
-      <dt>Title</dt>
-      <dd>{title}</dd>
-      <dt>Reviewed by</dt>
-      <dd>{reviewer}</dd>
-      <dt>Body</dt>
-      <dd>{body}</dd>
-      <dt>Score</dt>
-      <dd>{score}</dd>
+      <Card>
+        <Statistic>
+          <Statistic.Value>{score}</Statistic.Value>
+          <Statistic.Label>/ 5</Statistic.Label>
+        </Statistic>
+
+        <Card.Content header={title} />
+        <Card.Content description={body} />
+        <Card.Content extra>
+          reviewed by: {reviewer}
+          <Button basic onClick={openEditModal}>edit</Button> 
+        </Card.Content>
+      </Card>
+      <Modal open={isEditModalOpen}>
+        <ModalBody closeModal={closeEditModal} id={id} title={title} name={reviewer} body={body} score={score} />
+      </Modal>
     </>
   );
+
+  function openEditModal() {
+    setIsEditModalOpen(true);
+  }
+
+  function closeEditModal() {
+    setIsEditModalOpen(false);
+  };
 }
 
-async function fetchReviews() {
-  const res = await fetch('https://bookreview-ten.vercel.app/api/reviews', { headers: { 'Content-Type': 'application/json' } })
-  return await res.json()
+function ModalBody({ closeModal, isCreate, id, title: initialTitle, name: initialName, body: initialBody, score: initialScore }) {
+  const [title, setTitle] = useState(initialTitle);
+  const [name, setName] = useState(initialName);
+  const [body, setBody] = useState(initialBody);
+  const [score, setScore] = useState(initialScore);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const onSubmit = isCreate ? postReview : putReview
+
+  return (
+    <>
+      <Modal.Header as="h2">Post your book review!</Modal.Header>
+      <Modal.Content>
+        <Form>
+          <Form.Field>
+            <label htmlFor="title">Title: </label>
+            <input name="title" type="text" maxlength="255" value={title} onChange={(e) => {setTitle(e.target.value)}} />
+          </Form.Field>
+          <Form.Field>
+            <label htmlFor="name">Your name: </label>
+            <input name="name" type="text" maxlength="255" value={name} onChange={(e) => {setName(e.target.value)}} />
+          </Form.Field>
+          <Form.Field>
+            <label htmlFor="body">How was it?: </label>
+            <textarea value={body} name="body" onChange={(e) => {setBody(e.target.value)}} />
+          </Form.Field>
+          <Form.Field>
+            <div class="ui right labeled input">
+              <label htmlFor="score" class="ui label">Rate this book: </label>
+              <input type="number" minimum="1" maximun="5" name="score" value={score} onChange={(e) => {setScore(e.target.value)}}></input>
+              <div class="ui basic label">
+                /5
+              </div>
+            </div>
+          </Form.Field>
+        </Form>
+      </Modal.Content>
+      <Modal.Actions>
+        <Button color="green" onClick={onSubmit} disabled={isSubmitting}>GO!</Button>
+      </Modal.Actions>
+    </>
+  );
+
+  async function postReview(e) {
+    e.preventDefault();
+  
+    setIsSubmitting(true);
+
+    const options = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: title, reviewer: name, body: body, score: parseInt(score) })
+    };
+
+    fetch('https://bookreview-ten.vercel.app/api/reviews', options)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        closeModal();
+        window.location.reload();
+      });
+  };
+
+  async function putReview(e) {
+    e.preventDefault();
+  
+    setIsSubmitting(true);
+
+    const options = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: title, reviewer: name, body: body, score: parseInt(score) })
+    };
+
+    fetch(`https://bookreview-ten.vercel.app/api/reviews/${id}`, options)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        closeModal();
+        window.location.reload();
+      });
+  };
 }
 
 export default App;
