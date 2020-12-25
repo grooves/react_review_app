@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import 'semantic-ui-css/semantic.min.css'
-import { Card, Statistic, Button, Grid, Header, Divider, Modal, Form } from 'semantic-ui-react'
+import {
+  Container,
+  Card,
+  Button,
+  Grid,
+  Header,
+  Divider,
+  Modal,
+  Form,
+  Rating,
+} from 'semantic-ui-react'
 
 function App() {
   const [reviews, setReviews] = useState([]);
@@ -17,13 +27,15 @@ function App() {
 
   return (
     <div id="app">
-      <Header as="h1">Book Reviews</Header>
-      <Button primary onClick={openModal}>Post review</Button>
-      <Divider />
-      <Reviews reviews={reviews} openModal={openModal}/>
-      <Modal open={isCreateModalOpen} onClose={closeModal} closeIcon>
-        <ModalBody closeModal={closeModal} isCreate={true} />
-      </Modal>
+      <Container>
+        <Header as="h1" style={{"marginTop": "2em"}}>Book Reviews</Header>
+        <Button primary onClick={openModal}>Post review</Button>
+        <Divider />
+        <Reviews reviews={reviews} openModal={openModal}/>
+        <Modal open={isCreateModalOpen} onClose={closeModal} closeIcon>
+          <ModalBody closeModal={closeModal} isCreate={true} />
+        </Modal>
+      </Container>
     </div>
   );
 
@@ -44,15 +56,13 @@ function App() {
 
 function Reviews({ reviews, openModal }) {
   return (
-    <Grid columns={5}>
+    <Card.Group itemsPerRow={3} centered>
       {reviews.map((review, index) => {
         return (
-          <Grid.Column>
-            <Review {...review} openModal={openModal} key={`review-${index}`} />
-          </Grid.Column>
+          <Review {...review} openModal={openModal} key={`review-${index}`} />
         );
       })}
-    </Grid>
+    </Card.Group>
   );
 }
 
@@ -62,19 +72,27 @@ function Review({ id, title, reviewer, body, score, openModal }) {
   return (
     <>
       <Card>
-        <Statistic>
-          <Statistic.Value>{score}</Statistic.Value>
-          <Statistic.Label>/ 5</Statistic.Label>
-        </Statistic>
-
-        <Card.Content header={title} />
-        <Card.Content description={body} />
+        <Card.Content>
+          <Card.Header style={{"wordWrap": "break-word"}}>{title}</Card.Header>
+          <Card.Meta>
+            <br />
+            <Rating icon="star" defaultRating={score} maxRating={5} size="massive" disabled />
+            <br />
+          </Card.Meta>
+          <Card.Description>{body}</Card.Description>
+        </Card.Content>
         <Card.Content extra>
-          reviewed by: {reviewer}
-          <Button basic onClick={openEditModal}>edit</Button> 
+          <Grid>
+            <Grid.Column floated="left" width={10}>
+              reviewed by: {reviewer}
+            </Grid.Column>
+            <Grid.Column floated="right" width={5}>
+              <Button basic compact color="teal" onClick={openEditModal}>edit</Button> 
+            </Grid.Column>
+          </Grid>
         </Card.Content>
       </Card>
-      <Modal open={isEditModalOpen}>
+      <Modal open={isEditModalOpen} onClose={closeEditModal} closeIcon>
         <ModalBody closeModal={closeEditModal} id={id} title={title} name={reviewer} body={body} score={score} />
       </Modal>
     </>
@@ -96,10 +114,11 @@ function ModalBody({ closeModal, isCreate, id, title: initialTitle, name: initia
   const [score, setScore] = useState(initialScore);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = isCreate ? postReview : putReview
+  const verb = isCreate ? "Post" : "Edit"
 
   return (
     <>
-      <Modal.Header as="h2">Post your book review!</Modal.Header>
+      <Modal.Header as="h2">{`${verb} your book review!`}</Modal.Header>
       <Modal.Content>
         <Form>
           <Form.Field>
