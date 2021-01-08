@@ -10,6 +10,8 @@ import {
   Modal,
   Form,
   Rating,
+  Confirm,
+  Icon,
 } from 'semantic-ui-react'
 
 function App() {
@@ -68,6 +70,7 @@ function Reviews({ reviews, openModal }) {
 
 function Review({ id, title, reviewer, body, score, openModal }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
 
   return (
     <>
@@ -88,6 +91,7 @@ function Review({ id, title, reviewer, body, score, openModal }) {
             </Grid.Column>
             <Grid.Column floated="right" width={5}>
               <Button basic compact color="teal" onClick={openEditModal}>edit</Button> 
+              <Icon name="trash alternate outline" color="red" onClick={openDeleteConfirm} link />
             </Grid.Column>
           </Grid>
         </Card.Content>
@@ -95,6 +99,12 @@ function Review({ id, title, reviewer, body, score, openModal }) {
       <Modal open={isEditModalOpen} onClose={closeEditModal} closeIcon>
         <ModalBody closeModal={closeEditModal} id={id} title={title} name={reviewer} body={body} score={score} />
       </Modal>
+      <Confirm
+        open={isDeleteConfirmationOpen}
+        onConfirm={deleteReview}
+        onCancel={closeDeleteConfirm}
+        content="Are you sure you want to delete this review?"
+      />
     </>
   );
 
@@ -105,6 +115,33 @@ function Review({ id, title, reviewer, body, score, openModal }) {
   function closeEditModal() {
     setIsEditModalOpen(false);
   };
+
+  function openDeleteConfirm() {
+    setIsDeleteConfirmationOpen(true);
+  };
+
+  function closeDeleteConfirm() {
+    setIsDeleteConfirmationOpen(false);
+  };
+
+  function deleteReview() {
+    const options = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    fetch(`https://bookreview-ten.vercel.app/api/reviews/${id}`, options)
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        window.location.reload();
+      });
+  }
 }
 
 function ModalBody({ closeModal, isCreate, id, title: initialTitle, name: initialName, body: initialBody, score: initialScore }) {
