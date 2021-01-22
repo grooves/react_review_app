@@ -74,35 +74,37 @@ function App() {
   }
 
   return (
-    <section className="section">
-      <div className="container">
-        <h1 className="title">Book Review App</h1>
-        <div className="buttons is-right">
-          <button
-            data-testid="register"
-            onClick={() => openNewModal()}
-            className="button is-outlined"
-          >
-            Register
-            <FontAwesomeIcon icon="pencil-alt" />
-          </button>
+    <>
+      <section className="section">
+        <div className="container">
+          <h1 className="title">Book Review App</h1>
+          <div className="buttons is-right">
+            <button
+              data-testid="register"
+              onClick={openNewModal}
+              className="button is-outlined"
+            >
+              Register
+              <FontAwesomeIcon icon="pencil-alt" />
+            </button>
+          </div>
+          <ReviewList
+            reviews={reviews}
+            openEditModal={openEditModal}
+            removeReview={removeReview}
+          />
         </div>
-        {/* https://toge510.com/2020/03/20/movevaluefromchildtoparent/ */}
-        {/* 更新関数を渡す？ */}
-        <ModalWindow
-          modalOpenFlag={modalOpenFlag}
-          closeModal={closeModal}
-          editableReview={editableReview}
-          addList={addList}
-          updateList={updateList}
-        />
-        <ReviewList
-          reviews={reviews}
-          openEditModal={openEditModal}
-          removeReview={removeReview}
-        />
-      </div>
-    </section>
+      </section>
+      {/* https://toge510.com/2020/03/20/movevaluefromchildtoparent/ */}
+      {/* 更新関数を渡す？ */}
+      <ModalWindow
+        modalOpenFlag={modalOpenFlag}
+        closeModal={closeModal}
+        editableReview={editableReview}
+        addList={addList}
+        updateList={updateList}
+      />
+    </>
   );
 }
 
