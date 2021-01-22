@@ -1,7 +1,7 @@
-import React from 'react';
-import { Review } from './Review';
+import React from "react";
+import { Review } from "./Review";
 
-function ReviewList({reviews, removeReview, openEditModal}) {
+function ReviewList({ reviews, removeReview, openEditModal }) {
   return (
     <table className="table is-hoverable is-fullwidth">
       <thead>
@@ -15,7 +15,18 @@ function ReviewList({reviews, removeReview, openEditModal}) {
         </tr>
       </thead>
       <tbody>
-        <Review reviews={reviews} removeReview={removeReview} openEditModal={openEditModal} />
+        {reviews.map((review, index) => {
+          const id = review.id ?? index;
+          return (
+            <Review
+              key={id}
+              index={index}
+              removeReview={removeReview}
+              openEditModal={openEditModal}
+              {...{ ...review, id }}
+            />
+          );
+        })}
       </tbody>
     </table>
   );
