@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "./App.scss";
+import { API_URL } from "./settings";
 import ReviewList from "./components/ReviewList";
 import { ModalWindow } from "./components/ModalWindow";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,9 +15,7 @@ function App() {
   const [reviews, setReviews] = useState([]);
 
   async function getReviewList() {
-    const res = await axios.get(
-      "https://bookreview-ten.vercel.app/api/reviews"
-    );
+    const res = await axios.get(API_URL);
     return res.data;
   }
   // useEffectでawait使いたい時
@@ -60,7 +59,7 @@ function App() {
 
   async function removeReview(id) {
     if (window.confirm("レビューを削除しますか?")) {
-      await axios.delete(`https://bookreview-ten.vercel.app/api/reviews/${id}`);
+      await axios.delete(`${API_URL}/${id}`);
       const removedArr = [...reviews].filter((review) => review.id !== id);
       setReviews(removedArr);
     } else {

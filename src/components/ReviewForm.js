@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { API_URL } from "../settings";
 
 export function ReviewForm(props) {
   const { id } = props.editableReview;
@@ -84,7 +85,7 @@ export function ReviewForm(props) {
   async function postReview() {
     console.log(formData);
     const { title, score, body, reviewer } = formData;
-    await axios.post("https://bookreview-ten.vercel.app/api/reviews", {
+    await axios.post(API_URL, {
       title,
       score,
       body,
@@ -96,7 +97,7 @@ export function ReviewForm(props) {
   async function updateReview(id) {
     console.log(formData);
     const { title, score, body, reviewer } = formData;
-    await axios.put(`https://bookreview-ten.vercel.app/api/reviews/${id}`, {
+    await axios.put(`${API_URL}/${id}`, {
       title,
       score,
       body,
