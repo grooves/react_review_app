@@ -32,54 +32,47 @@ export function ReviewForm(props) {
   // async関数にしてあげる　updateReviewをawaitするために
   async function handleSubmit(event) {
     event.preventDefault(); // 画面遷移してしまわないように必要
-    console.log(formData);
     if (validate(formData)) {
       if (id) {
         await updateReview(id);
       } else {
         postReview();
       }
+      props.closeModal();
     }
-    props.closeModal();
   }
 
   function validate({ title, score, body, reviewer }) {
-    if (title && title.length <= 255) {
+    let valid = true;
+    if (!!title && title.length <= 255) {
       setErrorTitleMessage("");
     } else {
+      valid = false;
       setErrorTitleMessage("Title is invalid");
     }
 
-    if (score && 0 < score <= 5) {
+    if (0 < score && score <= 5) {
       setErrorScoreMessage("");
     } else {
+      valid = false;
       setErrorScoreMessage("Score is invalid");
     }
 
-    if (body && body.length <= 255) {
+    if (!!body && body.length <= 255) {
       setErrorBodyMessage("");
     } else {
+      valid = false;
       setErrorBodyMessage("Body is invalid");
     }
 
-    if (reviewer && reviewer.length <= 255) {
+    if (!!reviewer && reviewer.length <= 255) {
       setErrorReviewerMessage("");
     } else {
+      valid = false;
       setErrorReviewerMessage("Reviewer is invalid");
     }
 
-    if (
-      !(
-        errorTitleMessage &&
-        errorScoreMessage &&
-        setErrorBodyMessage &&
-        errorReviewerMessage
-      )
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+    return valid;
   }
 
   async function postReview() {
