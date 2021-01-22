@@ -2,20 +2,19 @@ import React from "react";
 import Modal from "react-modal";
 import { ReviewForm } from "./ReviewForm";
 
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    padding: "0",
+    transform: "translate(-50%, -50%)",
+  },
+};
+
 export function ModalWindow(props) {
   // Modal.setAppElement("#root");
-
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      padding: "0",
-      transform: "translate(-50%, -50%)",
-    },
-  };
-
   return (
     <div className="modal" data-testid="modal">
       <Modal
