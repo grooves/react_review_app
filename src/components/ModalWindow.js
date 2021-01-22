@@ -13,22 +13,28 @@ const customStyles = {
   },
 };
 
-export function ModalWindow(props) {
+export function ModalWindow({
+  modalOpenFlag,
+  closeModal,
+  editableReview,
+  addList,
+  updateList,
+}) {
   // Modal.setAppElement("#root");
   return (
     <div className="modal" data-testid="modal">
       <Modal
-        isOpen={props.modalOpenFlag}
-        onRequestClose={props.closeModal}
+        isOpen={modalOpenFlag}
+        onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
         ariaHideApp={false}
       >
         <ReviewForm
-          closeModal={props.closeModal}
-          editableReview={props.editableReview}
-          addList={props.addList}
-          updateList={props.updateList}
+          closeModal={closeModal}
+          editableReview={editableReview}
+          addList={addList}
+          updateList={updateList}
         />
       </Modal>
     </div>
