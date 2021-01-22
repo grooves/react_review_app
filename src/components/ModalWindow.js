@@ -28,6 +28,7 @@ export function ModalWindow(props) {
         <ReviewForm
           closeModal={props.closeModal}
           editableReview={props.editableReview}
+          addList={props.addList}
           updateList={props.updateList}
         />
       </Modal>

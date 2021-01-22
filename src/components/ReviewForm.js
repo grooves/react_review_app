@@ -91,7 +91,7 @@ export function ReviewForm(props) {
       body,
       reviewer,
     });
-    props.updateList(formData);
+    props.addList(formData);
   }
 
   async function updateReview(id) {

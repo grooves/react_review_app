@@ -47,6 +47,12 @@ function App() {
     setModalOpenFlag(false);
   }
 
+  function addList(review) {
+    const array = [...reviews];
+    array.push(review);
+    setReviews(array);
+  }
+
   function updateList(review) {
     const i = reviews.findIndex(({ id }) => id === review.id);
     const array = [...reviews]; // 値渡しと参照渡し
@@ -87,6 +93,7 @@ function App() {
           modalOpenFlag={modalOpenFlag}
           closeModal={closeModal}
           editableReview={editableReview}
+          addList={addList}
           updateList={updateList}
         />
         <ReviewList
