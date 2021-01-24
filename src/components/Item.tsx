@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 });
 
 export type BasicItemProps = {
-  id: number;
+  id: string;
   title: string;
   score: number;
   body: string;
@@ -35,14 +35,14 @@ export type BasicItemProps = {
 
 type ItemProps = {
   item: BasicItemProps;
-  setItemId: (itemId: number) => void;
+  setItemId: (itemId: string) => void;
   setTitle: (title: string) => void;
   setScore: (score: number) => void;
   setBody: (body: string) => void;
   setReviewer: (reviewer: string) => void;
   setIsEdit: (isEdit: boolean) => void;
   openModal: () => void;
-  deleteItem: (id: number) => void;
+  deleteItem: (id: string) => void;
 };
 
 export function Item({

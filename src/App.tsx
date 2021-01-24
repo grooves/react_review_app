@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const [items, setItems] = useState<BasicItemProps[]>([]);
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [itemId, setItemId] = useState(0);
+  const [itemId, setItemId] = useState("0");
   const [title, setTitle] = useState("");
   const [score, setScore] = useState(5);
   const [body, setBody] = useState("");
@@ -49,7 +49,7 @@ function App() {
 
   function closeModal() {
     setIsModalOpened(false);
-    setItemId(0);
+    setItemId("0");
     setTitle("");
     setScore(5);
     setBody("");
@@ -81,7 +81,7 @@ function App() {
         });
     } else {
       const newItem = {
-        id: Number(items.length),
+        id: `${items.length}`,
         title,
         score,
         body,
@@ -102,7 +102,7 @@ function App() {
     }
   }
 
-  async function deleteItem(id: number) {
+  async function deleteItem(id: string) {
     if (window.confirm("本当に削除してよろしいですか？")) {
       const url = `https://bookreview-ten.vercel.app/api/reviews/${id}`;
       await axios.delete(url);
