@@ -22,10 +22,12 @@ function App() {
   const [items, setItems] = useState<BasicItemProps[]>([]);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [itemId, setItemId] = useState("0");
-  const [title, setTitle] = useState("");
-  const [score, setScore] = useState(5);
-  const [body, setBody] = useState("");
-  const [reviewer, setReviewer] = useState("");
+  const [formData, setFormData] = useState({
+    title: "",
+    score: 5,
+    body: "",
+    reviewer: "",
+  });
   const [isEdit, setIsEdit] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
 
@@ -36,17 +38,25 @@ function App() {
   function closeModal() {
     setIsModalOpened(false);
     setItemId("0");
-    setTitle("");
-    setScore(5);
-    setBody("");
-    setReviewer("");
+    setFormData({
+      title: "",
+      score: 5,
+      body: "",
+      reviewer: "",
+    });
     setIsEdit(false);
     setErrors([]);
   }
 
   function updateItems() {
     if (isEdit) {
-      const updatedItem = { id: itemId, title, score, body, reviewer };
+      const updatedItem = {
+        id: itemId,
+        title: formData.title,
+        score: formData.score,
+        body: formData.body,
+        reviewer: formData.reviewer,
+      };
       putReview(updatedItem)
         .then(() => {
           const updatedItems = items.map((item) => {
@@ -64,10 +74,10 @@ function App() {
     } else {
       const newItem = {
         id: `${items.length}`,
-        title,
-        score,
-        body,
-        reviewer,
+        title: formData.title,
+        score: formData.score,
+        body: formData.body,
+        reviewer: formData.reviewer,
       };
       postReview(newItem)
         .then(() => {
@@ -114,10 +124,7 @@ function App() {
               <Item
                 item={item}
                 setItemId={setItemId}
-                setTitle={setTitle}
-                setScore={setScore}
-                setBody={setBody}
-                setReviewer={setReviewer}
+                setFormData={setFormData}
                 setIsEdit={setIsEdit}
                 openModal={openModal}
                 deleteItem={deleteItem}
@@ -141,14 +148,8 @@ function App() {
           closeModal={closeModal}
           errors={errors}
           updateItems={updateItems}
-          title={title}
-          setTitle={setTitle}
-          score={score}
-          setScore={setScore}
-          body={body}
-          setBody={setBody}
-          reviewer={reviewer}
-          setReviewer={setReviewer}
+          formData={formData}
+          setFormData={setFormData}
         />
       </Grid>
     </Container>

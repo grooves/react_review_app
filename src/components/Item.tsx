@@ -10,6 +10,7 @@ import {
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import { Edit, Delete, StarBorder } from "@material-ui/icons";
+import { FormDataProps } from "./Form";
 
 const useStyles = makeStyles({
   root: {
@@ -27,19 +28,12 @@ const useStyles = makeStyles({
 
 export type BasicItemProps = {
   id: string;
-  title: string;
-  score: number;
-  body: string;
-  reviewer: string;
-};
+} & FormDataProps;
 
 type ItemProps = {
   item: BasicItemProps;
   setItemId: (itemId: string) => void;
-  setTitle: (title: string) => void;
-  setScore: (score: number) => void;
-  setBody: (body: string) => void;
-  setReviewer: (reviewer: string) => void;
+  setFormData: (formData: FormDataProps) => void;
   setIsEdit: (isEdit: boolean) => void;
   openModal: () => void;
   deleteItem: (id: string) => void;
@@ -48,10 +42,7 @@ type ItemProps = {
 export function Item({
   item,
   setItemId,
-  setTitle,
-  setScore,
-  setBody,
-  setReviewer,
+  setFormData,
   setIsEdit,
   openModal,
   deleteItem,
@@ -60,10 +51,12 @@ export function Item({
 
   function openEditModal() {
     setItemId(item.id);
-    setTitle(item.title);
-    setScore(item.score);
-    setBody(item.body);
-    setReviewer(item.reviewer);
+    setFormData({
+      title: item.title,
+      score: item.score,
+      body: item.body,
+      reviewer: item.reviewer,
+    });
     setIsEdit(true);
     openModal();
   }

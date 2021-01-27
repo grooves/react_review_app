@@ -35,14 +35,8 @@ export function ReviewModal({
   closeModal,
   errors,
   updateItems,
-  title,
-  setTitle,
-  score,
-  setScore,
-  body,
-  setBody,
-  reviewer,
-  setReviewer,
+  formData,
+  setFormData,
 }: ReviewModalProps) {
   const classes = useStyles();
 
@@ -70,16 +64,7 @@ export function ReviewModal({
                   </li>
                 ))}
               </ul>
-              <Form
-                title={title}
-                setTitle={setTitle}
-                score={score}
-                setScore={setScore}
-                body={body}
-                setBody={setBody}
-                reviewer={reviewer}
-                setReviewer={setReviewer}
-              />
+              <Form formData={formData} setFormData={setFormData} />
               <Grid container justify="center" style={{ margin: "2rem" }}>
                 <Button
                   variant="contained"
