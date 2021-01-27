@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, makeStyles } from "@material-ui/core";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ReviewModal } from "./components/ReviewModal";
 import { Item, BasicItemProps } from "./components/Item";
 
@@ -73,11 +73,7 @@ function App() {
           closeModal();
         })
         .catch((err) => {
-          if (err?.response?.data?.errors) {
-            setErrors(err.response.data.errors);
-          } else {
-            setErrors(["何らかの理由でエラーになりました"]);
-          }
+          throwErrors(err);
         });
     } else {
       const newItem = {
@@ -93,12 +89,16 @@ function App() {
           closeModal();
         })
         .catch((err) => {
-          if (err?.response?.data?.errors) {
-            setErrors(err.response.data.errors);
-          } else {
-            setErrors(["何らかの理由でエラーになりました"]);
-          }
+          throwErrors(err);
         });
+    }
+  }
+
+  function throwErrors(err: AxiosError) {
+    if (err?.response?.data?.errors) {
+      setErrors(err.response.data.errors);
+    } else {
+      setErrors(["何らかの理由でエラーになりました"]);
     }
   }
 
