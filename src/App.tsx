@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, makeStyles } from "@material-ui/core";
 import axios, { AxiosError } from "axios";
+import { fetchReviews, postReview, putReview } from "./api";
 import { ReviewModal } from "./components/ReviewModal";
 import { Item, BasicItemProps } from "./components/Item";
-
-async function fetchReviews() {
-  const url = "https://bookreview-ten.vercel.app/api/reviews";
-  return await axios.get(url);
-}
-
-async function postReview(newReview: BasicItemProps) {
-  const url = "https://bookreview-ten.vercel.app/api/reviews";
-  return await axios.post(url, newReview);
-}
-
-async function putReview(updatedReview: BasicItemProps) {
-  const url = `https://bookreview-ten.vercel.app/api/reviews/${updatedReview.id}`;
-  return await axios.put(url, updatedReview);
-}
 
 const useStyles = makeStyles((theme) => ({
   root: {
