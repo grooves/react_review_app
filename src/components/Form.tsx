@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 export type FormDataProps = {
   title: string;
@@ -9,10 +9,19 @@ export type FormDataProps = {
 
 export type FormProps = {
   formData: FormDataProps;
-  setFormData: (formData: FormDataProps) => void;
+  changeTitle: (e: ChangeEvent<HTMLInputElement>) => void;
+  changeScore: (e: ChangeEvent<HTMLInputElement>) => void;
+  changeBody: (e: ChangeEvent<HTMLTextAreaElement>) => void;
+  changeReviewer: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
-export function Form({ formData, setFormData }: FormProps) {
+export function Form({
+  formData,
+  changeTitle,
+  changeScore,
+  changeBody,
+  changeReviewer,
+}: FormProps) {
   return (
     <>
       <div className="row">
@@ -24,9 +33,7 @@ export function Form({ formData, setFormData }: FormProps) {
             type="text"
             id="title"
             value={formData.title}
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
+            onChange={(e) => changeTitle(e)}
           />
         </div>
       </div>
@@ -41,9 +48,7 @@ export function Form({ formData, setFormData }: FormProps) {
             max={5}
             id="score"
             value={formData.score}
-            onChange={(e) =>
-              setFormData({ ...formData, score: Number(e.target.value) })
-            }
+            onChange={(e) => changeScore(e)}
           />
         </div>
       </div>
@@ -55,7 +60,7 @@ export function Form({ formData, setFormData }: FormProps) {
           <textarea
             id="body"
             value={formData.body}
-            onChange={(e) => setFormData({ ...formData, body: e.target.value })}
+            onChange={(e) => changeBody(e)}
           />
         </div>
       </div>
@@ -68,9 +73,7 @@ export function Form({ formData, setFormData }: FormProps) {
             type="text"
             id="reviewer"
             value={formData.reviewer}
-            onChange={(e) =>
-              setFormData({ ...formData, reviewer: e.target.value })
-            }
+            onChange={(e) => changeReviewer(e)}
           />
         </div>
       </div>

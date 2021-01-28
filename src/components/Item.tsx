@@ -32,34 +32,18 @@ export type BasicItemProps = {
 
 type ItemProps = {
   item: BasicItemProps;
-  setItemId: (itemId: string) => void;
-  setFormData: (formData: FormDataProps) => void;
-  setIsEdit: (isEdit: boolean) => void;
   openModal: () => void;
+  openEditModal: (item: BasicItemProps) => void;
   deleteItem: (id: string) => void;
 };
 
 export function Item({
   item,
-  setItemId,
-  setFormData,
-  setIsEdit,
   openModal,
+  openEditModal,
   deleteItem,
 }: ItemProps) {
   const classes = useStyles();
-
-  function openEditModal() {
-    setItemId(item.id);
-    setFormData({
-      title: item.title,
-      score: item.score,
-      body: item.body,
-      reviewer: item.reviewer,
-    });
-    setIsEdit(true);
-    openModal();
-  }
 
   return (
     <Grid item>
@@ -93,7 +77,7 @@ export function Item({
                 variant="contained"
                 color="primary"
                 startIcon={<Edit />}
-                onClick={openEditModal}
+                onClick={() => openEditModal(item)}
               >
                 編集
               </Button>

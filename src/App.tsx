@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button, Container, Grid, makeStyles } from "@material-ui/core";
 import axios, { AxiosError } from "axios";
 import { fetchReviews, postReview, putReview } from "./api";
@@ -35,6 +35,18 @@ function App() {
     setIsModalOpened(true);
   }
 
+  function openEditModal(item: BasicItemProps) {
+    setItemId(item.id);
+    setFormData({
+      title: item.title,
+      score: item.score,
+      body: item.body,
+      reviewer: item.reviewer,
+    });
+    setIsEdit(true);
+    openModal();
+  }
+
   function closeModal() {
     setIsModalOpened(false);
     setItemId("0");
@@ -46,6 +58,22 @@ function App() {
     });
     setIsEdit(false);
     setErrors([]);
+  }
+
+  function changeTitle(e: ChangeEvent<HTMLInputElement>) {
+    setFormData({ ...formData, title: e.target.value });
+  }
+
+  function changeScore(e: ChangeEvent<HTMLInputElement>) {
+    setFormData({ ...formData, score: Number(e.target.value) });
+  }
+
+  function changeBody(e: ChangeEvent<HTMLTextAreaElement>) {
+    setFormData({ ...formData, body: e.target.value });
+  }
+
+  function changeReviewer(e: ChangeEvent<HTMLInputElement>) {
+    setFormData({ ...formData, reviewer: e.target.value });
   }
 
   function updateItems() {
@@ -123,10 +151,8 @@ function App() {
             {items.map((item) => (
               <Item
                 item={item}
-                setItemId={setItemId}
-                setFormData={setFormData}
-                setIsEdit={setIsEdit}
                 openModal={openModal}
+                openEditModal={openEditModal}
                 deleteItem={deleteItem}
                 key={item.id}
               />
@@ -149,7 +175,10 @@ function App() {
           errors={errors}
           updateItems={updateItems}
           formData={formData}
-          setFormData={setFormData}
+          changeTitle={changeTitle}
+          changeScore={changeScore}
+          changeBody={changeBody}
+          changeReviewer={changeReviewer}
         />
       </Grid>
     </Container>
