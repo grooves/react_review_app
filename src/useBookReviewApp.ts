@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 export function useBookReviewApp() {
   const [items, setItems] = useState<BasicItemProps[]>([]);
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [itemId, setItemId] = useState("0");
+  const [id, setId] = useState("0");
   const [formData, setFormData] = useState({
     title: "",
     score: 5,
@@ -35,7 +35,7 @@ export function useBookReviewApp() {
   }
 
   function openEditModal(item: BasicItemProps) {
-    setItemId(item.id);
+    setId(item.id);
     setFormData({
       title: item.title,
       score: item.score,
@@ -48,7 +48,7 @@ export function useBookReviewApp() {
 
   function closeModal() {
     setIsModalOpened(false);
-    setItemId("0");
+    setId("0");
     setFormData({
       title: "",
       score: 5,
@@ -78,7 +78,7 @@ export function useBookReviewApp() {
   function updateItems() {
     if (isEdit) {
       const updatedItem = {
-        id: itemId,
+        id,
         title: formData.title,
         score: formData.score,
         body: formData.body,
@@ -87,7 +87,7 @@ export function useBookReviewApp() {
       putReview(updatedItem)
         .then(() => {
           const updatedItems = items.map((item) => {
-            if (item.id === itemId) {
+            if (item.id === id) {
               return updatedItem;
             }
             return item;
